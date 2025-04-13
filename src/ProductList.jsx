@@ -220,7 +220,7 @@ function ProductList({ onHomeClick }) {
         padding: '15px',
         display: 'flex',
         justifyContent: 'space-between',
-        alignIems: 'center',
+        alignItems: 'center',
         fontSize: '20px',
     }
     const styleObjUl = {
@@ -255,11 +255,11 @@ function ProductList({ onHomeClick }) {
         setShowCart(false);
     };
 
-    const handleAddToCart = ({plant}) => {
+    const handleAddToCart = (plant) => {
         dispatch(addItem(plant));
         setAddedToCart((addedToCart) => ({
             ...addedToCart,
-            [plant.namne]: true
+            [plant.name]: true
         }));
     }
 
