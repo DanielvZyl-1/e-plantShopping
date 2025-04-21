@@ -257,11 +257,11 @@ function ProductList({ onHomeClick }) {
 
     const handleAddToCart = (plant) => {
         dispatch(addItem(plant));
-        setAddedToCart((addedToCart) => ({
+        setAddedToCart(addedToCart => ({
             ...addedToCart,
             [plant.name]: true
         }));
-    }
+    };
 
     return (
         <div>
