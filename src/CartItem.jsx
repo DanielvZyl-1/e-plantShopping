@@ -59,7 +59,8 @@ const CartItem = ({ onContinueShopping }) => {
     return totalCost
   };
 
-  console.log('removeItem handler is', handleRemove);
+  console.log('updateQuantity is', updateQuantity);
+  console.log('removeItem      is', removeItem);
 
   return (
     <div className="cart-container">
