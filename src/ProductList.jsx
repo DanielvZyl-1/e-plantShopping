@@ -9,6 +9,61 @@ function ProductList({ onHomeClick }) {
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
     const [addedToCart,setAddedToCart] = useState({});
     const totalCount = useSelector(selectCartItemCount);
+    const styleObj = {
+        backgroundColor: '#4CAF50',
+        color: '#fff!important',
+        padding: '15px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        fontSize: '20px',
+    }
+    const styleObjUl = {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '1100px',
+    }
+    const styleA = {
+        color: 'white',
+        fontSize: '30px',
+        textDecoration: 'none',
+    }
+
+    const handleHomeClick = (e) => {
+        e.preventDefault();
+        onHomeClick();
+    };
+
+    const handleCartClick = (e) => {
+        e.preventDefault();
+        setShowCart(true); // Set showCart to true when cart icon is clicked
+    };
+    const handlePlantsClick = (e) => {
+        e.preventDefault();
+        setShowPlants(true); // Set showAboutUs to true when "About Us" link is clicked
+        setShowCart(false); // Hide the cart when navigating to About Us
+    };
+
+    const handleContinueShopping = (e) => {
+        e.preventDefault();
+        setShowCart(false);
+    };
+
+    const handleAddToCart = (plant) => {
+        dispatch(addItem({...plant, quantity: 1}));
+        setAddedToCart(prev => ({
+            ...prev,
+            [plant.name]: true
+        }));
+    };
+
+    // Function to check if a plant is already in the cart
+    const inCart = plantName =>
+        cartItems.some(item => item.name === plantName && item.quantity > 0);
+
+    const cartItems = useSelector(state => state.cart.items);
+
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -17,7 +72,8 @@ function ProductList({ onHomeClick }) {
                     name: "Snake Plant",
                     image: "https://cdn.pixabay.com/photo/2021/01/22/06/04/snake-plant-5939187_1280.jpg",
                     description: "Produces oxygen at night, improving air quality.",
-                    cost: "$15"
+                    cost: "$15",
+                    onSale: true
                 },
                 {
                     name: "Spider Plant",
@@ -47,7 +103,8 @@ function ProductList({ onHomeClick }) {
                     name: "Aloe Vera",
                     image: "https://cdn.pixabay.com/photo/2018/04/02/07/42/leaf-3283175_1280.jpg",
                     description: "Purifies the air and has healing properties for skin.",
-                    cost: "$14"
+                    cost: "$14",
+                    onSale: true
                 }
             ]
         },
@@ -216,54 +273,6 @@ function ProductList({ onHomeClick }) {
             ]
         }
     ];
-    const styleObj = {
-        backgroundColor: '#4CAF50',
-        color: '#fff!important',
-        padding: '15px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        fontSize: '20px',
-    }
-    const styleObjUl = {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '1100px',
-    }
-    const styleA = {
-        color: 'white',
-        fontSize: '30px',
-        textDecoration: 'none',
-    }
-
-    const handleHomeClick = (e) => {
-        e.preventDefault();
-        onHomeClick();
-    };
-
-    const handleCartClick = (e) => {
-        e.preventDefault();
-        setShowCart(true); // Set showCart to true when cart icon is clicked
-    };
-    const handlePlantsClick = (e) => {
-        e.preventDefault();
-        setShowPlants(true); // Set showAboutUs to true when "About Us" link is clicked
-        setShowCart(false); // Hide the cart when navigating to About Us
-    };
-
-    const handleContinueShopping = (e) => {
-        e.preventDefault();
-        setShowCart(false);
-    };
-
-    const handleAddToCart = (plant) => {
-        dispatch(addItem({...plant, quantity: 1}));
-        setAddedToCart(prev => ({
-            ...prev,
-            [plant.name]: true
-        }));
-    };
 
     return (
         <div>
@@ -292,12 +301,12 @@ function ProductList({ onHomeClick }) {
         <h1><div>{category.category}</div></h1>
         <div className="product-list">
             {category.plants.map((plant, plantIndex) => (
-            <div className="product-card" key={plantIndex}>
+            <div className={`product-card ${plant.onSale ? 'on-sale' : ''}`} key={plantIndex}>
                 <img className="product-image" src={plant.image} alt={plant.name} />
                 <div className="product-title">{plant.name}</div>
                 <div className="product-description">{plant.description}</div>
                 <div className="product-price">{plant.cost}</div>
-                <button  className="product-button" onClick={() => handleAddToCart(plant)}>Add to Cart</button>
+                {!inCart(plant.name) ? (<button  className="product-button" onClick={() => handleAddToCart(plant)} >Add to Cart</button>) : (<button className="product-button added-to-cart">Added</button>)}
             </div>
             ))}
         </div>
