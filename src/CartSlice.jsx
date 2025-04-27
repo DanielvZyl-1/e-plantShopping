@@ -32,4 +32,7 @@ export const CartSlice = createSlice({
 
 export const { addItem, removeItem, updateQuantity } = CartSlice.actions;
 
+export const selectCartItemCount = state =>
+  state.cart.items.reduce((sum, item) => sum + item.quantity, 0);
+
 export default CartSlice.reducer;
